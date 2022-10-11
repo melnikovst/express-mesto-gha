@@ -18,4 +18,21 @@ cardRouter.delete('/cards/:cardId', (req, res) => {
   Card.findByIdAndDelete(cardId).then((val) => res.send(val));
 });
 
+cardRouter.put('/cards/:cardId/likes', (req, res) => {
+  console.log(req.user._id);
+  Card.findByIdAndUpdate(
+    req.params.cardId,
+    { $addToSet: { likes: req.user._id } }, // добавить _id в массив, если его там нет
+    { new: true },
+  ).then((val) => res.send(val));
+});
+
+cardRouter.delete('/cards/:cardId/likes', (req, res) => {
+  Card.findByIdAndUpdate(
+    req.params.cardId,
+    { $pull: { likes: req.user._id } }, // убрать _id из массива
+    { new: true },
+  ).then((val) => res.send(val));
+});
+
 module.exports = cardRouter;

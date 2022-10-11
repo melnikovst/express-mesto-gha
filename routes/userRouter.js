@@ -1,8 +1,18 @@
 const userRouter = require('express').Router();
 const User = require('../models/userModel');
+const { validateErrors } = require('../utils/utils.js');
 
 userRouter.get('/users', (_, res) => {
-  User.find({}).then((val) => res.send(val));
+  User.find({}).then((val) => {
+    throw new Error;
+    res.send(val);
+  }).catch((err) => {
+    console.log('САМА ОШИБКА ' + Error)
+    console.log('ОШИБКА ' + err);
+    console.log('ТИП ОШИБКИ ' + typeof err);
+    console.log('МЕССАГА ' + err.message);
+    console.log('ИМЯ ' + err.name);
+  });
 });
 
 userRouter.post('/users', (req, res) => {
@@ -20,6 +30,10 @@ userRouter.patch('/users/me', (req, res) => {
   console.log('owner ' + owner);
   console.log(req.body);
   console.log(User);
+  User.findByIdAndUpdate('6342ec049e063b68d7526c9c', req.body, { new: true }).then((val) => res.send(val));
+});
+
+userRouter.patch('/users/me/avatar', (req, res) => {
   User.findByIdAndUpdate('6342ec049e063b68d7526c9c', req.body, { new: true }).then((val) => res.send(val));
 });
 
