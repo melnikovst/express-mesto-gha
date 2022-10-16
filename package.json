@@ -2,7 +2,7 @@
   "name": "mesto-backend",
   "author": "Stanislav Melnikov",
   "description": "backend",
-  "main": "index.js",
+  "main": "app.js",
   "devDependencies": {
     "eslint": "^8.25.0",
     "eslint-config-airbnb-base": "^15.0.0",
