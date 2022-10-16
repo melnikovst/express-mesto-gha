@@ -25,10 +25,14 @@ module.exports.deleteCard = async (req, res) => {
   try {
     const { cardId } = req.params;
     const response = await Card.findByIdAndDelete(cardId);
+    if (!response) {
+      res.status(404).send({ message: 'Карточки с указанным ID не существует.' });
+      return;
+    }
     res.send(response);
   } catch (error) {
     if (error.name === 'CastError') {
-      res.status(404).send({ message: 'Карточка с указанным ID не найдена.' });
+      res.status(400).send({ message: 'Карточка с указанным ID не найдена.' });
     }
     res.status(500).send({ message: 'Что-то пошло не так :(' });
   }
