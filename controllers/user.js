@@ -24,10 +24,14 @@ module.exports.getProfile = async (req, res) => {
   try {
     const { id } = req.params;
     const response = await User.findById(id);
+    if (!response) {
+      res.status(404).send({ message: 'Валидация не пройдена, проверьте правильность введённых данных!' });
+      return;
+    }
     res.send(response);
   } catch (error) {
     if (error.name === 'CastError') {
-      res.status(404).send({ message: 'Пользователя с таким ID не существует' });
+      res.status(400).send({ message: 'Пользователя с таким ID не существует' });
       return;
     }
     res.status(500).send({ message: 'Что-то пошло не так :(' });
