@@ -20,4 +20,4 @@ module.exports.fixLikesDoubles = (result, object) => {
 
 module.exports.notFoundHandler = (_, res) => {
   res.status(404).send({ message: 'Ошибка в url. Проверьте правильность введённых данных' });
-}
+};
