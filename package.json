@@ -11,7 +11,8 @@
   },
   "scripts": {
     "lint": "npx eslint .",
-    "dev": "nodemon index.js"
+    "dev": "nodemon app.js",
+    "run": "node app.js"
   },
   "dependencies": {
     "body-parser": "^1.20.1",
