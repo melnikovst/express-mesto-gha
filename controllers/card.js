@@ -41,6 +41,10 @@ module.exports.putLike = async (req, res) => {
       { $addToSet: { likes: req.user._id } },
       { new: true },
     );
+    if (!response) {
+      res.status(404).send({ message: 'Переданы некорректные данные для постановки/снятии лайка.' });
+      return;
+    }
     res.send(response);
   } catch (error) {
     fixLikesDoubles(res, error);
@@ -54,6 +58,10 @@ module.exports.deleteLike = async (req, res) => {
       { $pull: { likes: req.user._id } },
       { new: true },
     );
+    if (!response) {
+      res.status(404).send({ message: 'Переданы некорректные данные для постановки/снятии лайка.' });
+      return;
+    }
     res.send(response);
   } catch (error) {
     fixLikesDoubles(res, error);

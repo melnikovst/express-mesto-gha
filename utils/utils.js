@@ -8,11 +8,11 @@ module.exports.fixDoubles = (result, object) => {
 
 module.exports.fixLikesDoubles = (result, object) => {
   if (object.name === 'ValidationError') {
-    result.status(400).send({ message: 'Переданы некорректные данные для постановки/снятии лайка.' });
+    result.status(404).send({ message: 'Переданы некорректные данные для постановки/снятии лайка.' });
     return;
   }
   if (object.name === 'CastError') {
-    result.status(404).send({ message: 'Валидация не пройдена, проверьте правильность введённых данных!' });
+    result.status(400).send({ message: 'Валидация не пройдена, проверьте правильность введённых данных!' });
     return;
   }
   result.status(500).send({ message: 'Что-то пошло не так :(' });
