@@ -26,7 +26,9 @@ module.exports.deleteCard = async (req, res) => {
     const { cardId } = req.params;
     const response = await Card.findByIdAndDelete(cardId);
     if (!response) {
-      res.status(404).send({ message: 'Карточки с указанным ID не существует.' });
+      res
+        .status(404)
+        .send({ message: 'Карточки с указанным ID не существует.' });
       return;
     }
     res.send(response);
@@ -46,7 +48,11 @@ module.exports.putLike = async (req, res) => {
       { new: true },
     );
     if (!response) {
-      res.status(404).send({ message: 'Переданы некорректные данные для постановки/снятии лайка.' });
+      res
+        .status(404)
+        .send({
+          message: 'Переданы некорректные данные для постановки/снятии лайка.',
+        });
       return;
     }
     res.send(response);
@@ -63,7 +69,11 @@ module.exports.deleteLike = async (req, res) => {
       { new: true },
     );
     if (!response) {
-      res.status(404).send({ message: 'Переданы некорректные данные для постановки/снятии лайка.' });
+      res
+        .status(404)
+        .send({
+          message: 'Переданы некорректные данные для постановки/снятии лайка.',
+        });
       return;
     }
     res.send(response);
