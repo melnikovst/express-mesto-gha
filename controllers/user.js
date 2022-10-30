@@ -1,26 +1,36 @@
-const User = require('../models/userModel');
-const { fixDoubles } = require('../utils/utils');
+const crypt = require('bcryptjs');
+const BadRequest = require('../customErrors/BadRequest');
 
-module.exports.getProfiles = async (_, res) => {
+const User = require('../models/userModel');
+
+module.exports.getProfiles = async (_, res, next) => {
   try {
     const response = await User.find({});
     res.send(response);
   } catch (error) {
-    res.status(500).send(error);
+    next(error);
   }
 };
 
-module.exports.postProfile = async (req, res) => {
+module.exports.postProfile = async (req, res, next) => {
   try {
-    const { name, about, avatar } = req.body;
-    const response = await User.create({ name, about, avatar });
+    const {
+      name, about, avatar, email, password,
+    } = req.body;
+    const hashedPassword = await crypt.hash(password, 5);
+    const response = await User.create({
+      name, about, avatar, email, password: hashedPassword,
+    });
     res.send(response);
   } catch (error) {
-    fixDoubles(res, error);
+    if (error.name === 'ValidationError') {
+      next(new BadRequest('Валидация не пройдена, проверьте правильность введённых данных!'));
+    }
+    next(error);
   }
 };
 
-module.exports.getProfile = async (req, res) => {
+module.exports.getProfile = async (req, res, next) => {
   try {
     const { id } = req.params;
     const response = await User.findById(id);
@@ -31,29 +41,45 @@ module.exports.getProfile = async (req, res) => {
     res.send(response);
   } catch (error) {
     if (error.name === 'CastError') {
-      res.status(400).send({ message: 'Пользователя с таким ID не существует' });
-      return;
+      next(new BadRequest('Пользователя с таким ID не существует'));
     }
-    res.status(500).send({ message: 'Что-то пошло не так :(' });
+    next(error);
   }
 };
 
-module.exports.updateProfile = async (req, res) => {
+module.exports.updateProfile = async (req, res, next) => {
   try {
     const owner = req.user._id;
     const val = await User.findByIdAndUpdate(owner, req.body, { new: true, runValidators: true });
     res.send(val);
   } catch (error) {
-    fixDoubles(res, error);
+    if (error.name === 'ValidationError') {
+      next(new BadRequest('Валидация не пройдена, проверьте правильность введённых данных!'));
+    }
+    next(error);
   }
 };
 
-module.exports.updateAvatar = async (req, res) => {
+module.exports.updateAvatar = async (req, res, next) => {
   try {
     const owner = req.user._id;
     const val = await User.findByIdAndUpdate(owner, req.body, { new: true, runValidators: true });
     res.send(val);
   } catch (error) {
-    fixDoubles(res, error);
+    if (error.name === 'ValidationError') {
+      next(new BadRequest('Валидация не пройдена, проверьте правильность введённых данных!'));
+    }
+    next(error);
+  }
+};
+
+module.exports.me = async (req, res, next) => {
+  const owner = req.user._id;
+  console.log(req.user);
+  try {
+    const me = await User.findOne(owner);
+    res.send(me);
+  } catch (error) {
+    next(error);
   }
 };
