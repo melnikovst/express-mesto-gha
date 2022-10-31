@@ -18,7 +18,7 @@ module.exports.postProfile = async (req, res, next) => {
     const {
       name, about, avatar, email, password,
     } = req.body;
-    const hashedPassword = await crypt.hash(password, 5);
+    const hashedPassword = await crypt.hash(password, 15);
     const response = await User.create({
       name, about, avatar, email, password: hashedPassword,
     });
@@ -80,7 +80,7 @@ module.exports.updateAvatar = async (req, res, next) => {
 module.exports.me = async (req, res, next) => {
   try {
     const owner = req.user._id;
-    const me = await User.findById(owner);
+    const me = await User.findOne(owner);
     res.send(me);
   } catch (error) {
     next(error);
