@@ -2,6 +2,7 @@
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const Unauthorized = require('../customErrors/Unauthorized');
+const BadRequest = require('../customErrors/BadRequest');
 const User = require('../models/userModel');
 
 module.exports.login = async (req, res, next) => {
@@ -25,6 +26,9 @@ module.exports.login = async (req, res, next) => {
       httpOnly: true,
     }).send({ message: 'Залогинились успешно)' });
   } catch (error) {
+    if (error.name === 'ValidationError') {
+      next(new BadRequest('Ужасный запрос, проверьте введённые данные'));
+    }
     next(new Unauthorized(error.message));
   }
 };
