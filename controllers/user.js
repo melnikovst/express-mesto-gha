@@ -22,7 +22,7 @@ module.exports.postProfile = async (req, res, next) => {
     const response = await User.create({
       name, about, avatar, email, password: hashedPassword,
     });
-    res.send({ message: `Зарегистрировали ${response.name}` });
+    res.send(response);
   } catch (error) {
     if (error.name === 'ValidationError') {
       next(new BadRequest('Валидация не пройдена, проверьте правильность введённых данных!'));
