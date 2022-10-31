@@ -35,7 +35,7 @@ module.exports.deleteCard = async (req, res, next) => {
     }
     console.log(response.owner);
     console.log(req.user._id);
-    if (response.owner !== req.user._id) {
+    if (response.owner.toString() !== req.user._id) {
       next(new Forbidden('Чужое не трожь!'));
     }
     res.send(response);
