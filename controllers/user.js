@@ -14,11 +14,11 @@ module.exports.getProfiles = async (_, res, next) => {
 };
 
 module.exports.postProfile = async (req, res, next) => {
+  const {
+    name, about, avatar, email, password,
+  } = req.body;
   try {
-    const {
-      name, about, avatar, email, password,
-    } = req.body;
-    const hashedPassword = await crypt.hash(password, 15);
+    const hashedPassword = await crypt.hash(password, 5);
     const response = await User.create({
       name, about, avatar, email, password: hashedPassword,
     });
@@ -80,7 +80,7 @@ module.exports.updateAvatar = async (req, res, next) => {
 module.exports.me = async (req, res, next) => {
   try {
     const owner = req.user._id;
-    const me = await User.findOne(owner);
+    const me = await User.findOne({ _id: owner });
     res.send(me);
   } catch (error) {
     next(error);
