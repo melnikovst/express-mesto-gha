@@ -1,5 +1,6 @@
 const crypt = require('bcryptjs');
 const BadRequest = require('../customErrors/BadRequest');
+const UniqueError = require('../customErrors/UniqueError');
 
 const User = require('../models/userModel');
 
@@ -21,10 +22,13 @@ module.exports.postProfile = async (req, res, next) => {
     const response = await User.create({
       name, about, avatar, email, password: hashedPassword,
     });
-    res.send(response);
+    res.send({ message: `Зарегистрировали ${response.name}` });
   } catch (error) {
     if (error.name === 'ValidationError') {
       next(new BadRequest('Валидация не пройдена, проверьте правильность введённых данных!'));
+    }
+    if (error.code === 11000) {
+      next(new UniqueError('Валидация не пройдена, поле email должно быть уникальным.'));
     }
     next(error);
   }
@@ -74,10 +78,9 @@ module.exports.updateAvatar = async (req, res, next) => {
 };
 
 module.exports.me = async (req, res, next) => {
-  const owner = req.user._id;
-  console.log(req.user);
   try {
-    const me = await User.findOne(owner);
+    const owner = req.user._id;
+    const me = await User.findById(owner);
     res.send(me);
   } catch (error) {
     next(error);

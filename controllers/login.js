@@ -22,7 +22,7 @@ module.exports.login = (req, res, next) => {
     res.cookie('jwt', key, {
       maxAge: 7777777,
       httpOnly: true,
-    }).send('привет');
+    }).send({ message: 'Залогинились успешно)' });
   })
     .catch((err) => {
       /* res
