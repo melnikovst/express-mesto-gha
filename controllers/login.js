@@ -4,30 +4,27 @@ const jwt = require('jsonwebtoken');
 const Unauthorized = require('../customErrors/Unauthorized');
 const User = require('../models/userModel');
 
-module.exports.login = (req, res, next) => {
+module.exports.login = async (req, res, next) => {
   const { email, password } = req.body;
-  User.findOne({ email }).select('+password').then((user) => {
-    if (!user) {
+  try {
+    const test = await User.findOne({ email }).select('+password');
+    if (!test) {
       return Promise.reject(new Error('Неправильный адрес электронной почты или неверный пароль'));
     }
-    return bcrypt.compare(password, user.password);
-  }).then((matched) => {
+    const matched = await bcrypt.compare(password, test.password);
+    console.log(matched);
+    console.log(test);
     if (!matched) {
       return Promise.reject(new Error('Неправильные почта или пароль'));
     }
-    const key = jwt.sign({ _id: User._id }, 'super strong secret key', {
+    const key = jwt.sign({ _id: test._id }, '6360540f025b93cbcf82932d', {
       expiresIn: '7d',
     });
-    console.log(key);
     res.cookie('jwt', key, {
       maxAge: 7777777,
       httpOnly: true,
     }).send({ message: 'Залогинились успешно)' });
-  })
-    .catch((err) => {
-      /* res
-        .status(401)
-        .send({ message: err.message }); */
-      next(new Unauthorized(err.message));
-    });
+  } catch (error) {
+    next(new Unauthorized(error.message));
+  }
 };

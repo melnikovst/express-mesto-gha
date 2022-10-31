@@ -3,7 +3,7 @@ const token = require('jsonwebtoken');
 // eslint-disable-next-line consistent-return
 module.exports.ver = (req, res, next) => {
   const { jwt } = req.cookies;
-  console.log(req.cookies);
+  console.log(jwt);
   if (!jwt) {
     return res
       .status(401)
@@ -12,7 +12,7 @@ module.exports.ver = (req, res, next) => {
   let payload;
 
   try {
-    payload = token.verify(jwt, 'super strong secret key');
+    payload = token.verify(jwt, '6360540f025b93cbcf82932d');
   } catch (err) {
     return res
       .status(401)

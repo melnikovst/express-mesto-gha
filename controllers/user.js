@@ -15,12 +15,12 @@ module.exports.getProfiles = async (_, res, next) => {
 
 module.exports.postProfile = async (req, res, next) => {
   const {
-    name, about, avatar, email, password,
+    name, about, avatar, email, password, _id,
   } = req.body;
   try {
     const hashedPassword = await crypt.hash(password, 5);
     const response = await User.create({
-      name, about, avatar, email, password: hashedPassword,
+      _id, name, about, avatar, email, password: hashedPassword,
     });
     res.send(response);
   } catch (error) {
@@ -78,9 +78,9 @@ module.exports.updateAvatar = async (req, res, next) => {
 };
 
 module.exports.me = async (req, res, next) => {
+  console.log(req.user);
   try {
-    const owner = req.user._id;
-    const me = await User.findOne({ _id: owner });
+    const me = await User.findOne({ _id: req.user._id });
     res.send(me);
   } catch (error) {
     next(error);
