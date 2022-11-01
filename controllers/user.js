@@ -39,7 +39,8 @@ module.exports.getProfile = async (req, res, next) => {
     const { id } = req.params;
     const response = await User.findById(id);
     if (!response) {
-      res.status(404).send({ message: 'Валидация не пройдена, проверьте правильность введённых данных!' });
+      res.status(404)
+        .send({ message: 'Валидация не пройдена, проверьте правильность введённых данных!' });
       return;
     }
     res.send(response);

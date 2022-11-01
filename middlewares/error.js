@@ -35,6 +35,16 @@ module.exports.validateSignup = celebrate({
   }),
 });
 
+module.exports.validateIds = celebrate({
+  params: Joi.object().keys({
+    id: Joi
+      .string()
+      .required()
+      .hex()
+      .length(24),
+  }),
+});
+
 module.exports.validateSignin = celebrate({
   body: Joi.object().keys({
     email: Joi
