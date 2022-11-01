@@ -56,8 +56,7 @@ module.exports.putLike = async (req, res, next) => {
     );
     if (!response) {
       throw new NotFound('Переданы некорректные данные для постановки/снятии лайка.');
-    }
-    res.status(200).send(response);
+    } else res.status(200).send(response);
   } catch (error) {
     if (error.name === 'CastError') {
       next(new BadRequest('Карточка с указанным ID не найдена.'));
