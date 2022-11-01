@@ -68,6 +68,10 @@ module.exports.putLike = async (req, res, next) => {
 
 module.exports.deleteLike = async (req, res, next) => {
   try {
+    const checkAvailibleCard = await Card.findById(req.params.CardId);
+    if (!checkAvailibleCard) {
+      next(new NotFound('Карточка не найдена'));
+    }
     const response = await Card.findByIdAndUpdate(
       req.params.cardId,
       { $pull: { likes: req.user._id } },
