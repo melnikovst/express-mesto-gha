@@ -70,7 +70,7 @@ module.exports.deleteLike = async (req, res, next) => {
   try {
     const checkAvailibleCard = await Card.findById(req.params.CardId);
     if (!checkAvailibleCard) {
-      next(new NotFound('Карточка не найдена'));
+      throw next(new NotFound('Карточка не найдена'));
     }
     const response = await Card.findByIdAndUpdate(
       req.params.cardId,
@@ -80,7 +80,7 @@ module.exports.deleteLike = async (req, res, next) => {
     if (!response) {
       next(new NotFound('Переданы некорректные данные для постановки/снятии лайка.'));
     }
-    res.send(response);
+    res.status(200).send(response);
   } catch (error) {
     if (error.name === 'CastError') {
       next(new BadRequest('Валидация не пройдена, проверьте правильность введённых данных!'));
