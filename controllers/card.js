@@ -60,7 +60,7 @@ module.exports.putLike = async (req, res, next) => {
     res.send(response);
   } catch (error) {
     if (error.name === 'CastError') {
-      next(new BadRequest('Валидация не пройдена, проверьте правильность введённых данных!'));
+      next(new NotFound('ID не существует'));
     }
     next(error);
   }
