@@ -55,12 +55,12 @@ module.exports.putLike = async (req, res, next) => {
       { new: true },
     );
     if (!response) {
-      next(new NotFound('Переданы некорректные данные для постановки/снятии лайка.'));
+      throw new NotFound('Переданы некорректные данные для постановки/снятии лайка.');
     }
-    res.send(response);
+    res.status(200).send(response);
   } catch (error) {
     if (error.name === 'CastError') {
-      next(new NotFound('ID не существует'));
+      next(new BadRequest('Карточка с указанным ID не найдена.'));
     }
     next(error);
   }
