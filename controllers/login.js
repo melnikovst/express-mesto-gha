@@ -10,13 +10,13 @@ module.exports.login = async (req, res, next) => {
   try {
     const test = await User.findOne({ email }).select('+password');
     if (!test) {
-      return Promise.reject(new Error('Неправильный адрес электронной почты или неверный пароль'));
+      next(new Unauthorized('Неправильный адрес электронной почты или неверный пароль'));
     }
     const matched = await bcrypt.compare(password, test.password);
     console.log(matched);
     console.log(test);
     if (!matched) {
-      return Promise.reject(new Error('Неправильные почта или пароль'));
+      next(new Unauthorized('Неправильные почта или пароль'));
     }
     const key = jwt.sign({ _id: test._id }, '6360540f025b93cbcf82932d', {
       expiresIn: '7d',
@@ -27,8 +27,8 @@ module.exports.login = async (req, res, next) => {
     }).send({ message: 'Залогинились успешно)' });
   } catch (error) {
     if (error.name === 'ValidationError') {
-      next(new BadRequest('Ужасный запрос, проверьте введённые данные'));
+      next(new BadRequest('Ужасный запрос, что ты такое?'));
     }
-    next(new Unauthorized(error.message));
+    next(error);
   }
 };
