@@ -66,24 +66,23 @@ module.exports.putLike = async (req, res, next) => {
 };
 
 module.exports.deleteLike = async (req, res, next) => {
+  console.log(req.params.cardId === '635cef2c45a2f35a69ebb0ba');
   try {
-    const checkAvailibleCard = await Card.findById(req.params.CardId);
+    const checkAvailibleCard = await Card.findById(req.params.cardId);
     if (!checkAvailibleCard) {
-      throw next(new NotFound('Карточка не найдена'));
+      throw new NotFound('Карточка не найдена');
     }
-    const response = await Card.findByIdAndUpdate(
+    const updatedCard = await Card.findByIdAndUpdate(
       req.params.cardId,
       { $pull: { likes: req.user._id } },
       { new: true },
     );
-    if (!response) {
-      next(new NotFound('Переданы некорректные данные для постановки/снятии лайка.'));
-    }
-    res.status(200).send(response);
+    res.send(updatedCard);
   } catch (error) {
     if (error.name === 'CastError') {
       next(new BadRequest('Валидация не пройдена, проверьте правильность введённых данных!'));
+    } else {
+      next(error);
     }
-    next(error);
   }
 };
