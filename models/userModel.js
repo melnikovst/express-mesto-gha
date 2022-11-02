@@ -5,21 +5,18 @@ const userSchema = new mongoose.Schema(
   {
     name: {
       type: String,
-      required: true,
       minlength: 2,
       maxlength: 30,
       default: 'Жак-Ив Кусто',
     },
     about: {
       type: String,
-      required: true,
       minlength: 2,
       maxlength: 30,
       default: 'Исследователь',
     },
     avatar: {
       type: String,
-      required: true,
       validate: {
         validator: (value) => validator
           .isURL(value, { protocols: ['http', 'https', 'ftp'], require_tld: true, require_protocol: true }),
@@ -30,8 +27,6 @@ const userSchema = new mongoose.Schema(
     email: {
       unique: true,
       required: 'Введённый адресс электронной почты не может быть пустым', /* строка true */
-      minlength: 5,
-      maxlength: 20,
       type: String,
       validate: {
         validator: (value) => validator.isEmail(value),

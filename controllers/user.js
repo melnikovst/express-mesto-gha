@@ -1,5 +1,7 @@
+/* eslint-disable consistent-return */
 const crypt = require('bcryptjs');
 const BadRequest = require('../customErrors/BadRequest');
+const NotFound = require('../customErrors/NotFound');
 const UniqueError = require('../customErrors/UniqueError');
 
 const User = require('../models/userModel');
@@ -25,10 +27,10 @@ module.exports.postProfile = async (req, res, next) => {
     res.send(response);
   } catch (error) {
     if (error.name === 'ValidationError') {
-      next(new BadRequest('Валидация не пройдена, проверьте правильность введённых данных!'));
+      return next(new BadRequest('Валидация не пройдена, проверьте правильность введённых данных!'));
     }
     if (error.code === 11000) {
-      next(new UniqueError('Валидация не пройдена, поле email должно быть уникальным.'));
+      return next(new UniqueError('Валидация не пройдена, поле email должно быть уникальным.'));
     }
     next(error);
   }
@@ -39,14 +41,12 @@ module.exports.getProfile = async (req, res, next) => {
     const { id } = req.params;
     const response = await User.findById(id);
     if (!response) {
-      res.status(404)
-        .send({ message: 'Валидация не пройдена, проверьте правильность введённых данных!' });
-      return;
+      return next(new NotFound('Ничего не найдено :('));
     }
     res.send(response);
   } catch (error) {
     if (error.name === 'CastError') {
-      next(new BadRequest('Пользователя с таким ID не существует'));
+      return next(new BadRequest('Пользователя с таким ID не существует'));
     }
     next(error);
   }
@@ -54,12 +54,13 @@ module.exports.getProfile = async (req, res, next) => {
 
 module.exports.updateProfile = async (req, res, next) => {
   try {
+    const user = { name: req.body.name, about: req.body.about };
     const owner = req.user._id;
-    const val = await User.findByIdAndUpdate(owner, req.body, { new: true, runValidators: true });
+    const val = await User.findByIdAndUpdate(owner, user, { new: true, runValidators: true });
     res.send(val);
   } catch (error) {
     if (error.name === 'ValidationError') {
-      next(new BadRequest('Валидация не пройдена, проверьте правильность введённых данных!'));
+      return next(new BadRequest('Валидация не пройдена, проверьте правильность введённых данных!'));
     }
     next(error);
   }
@@ -67,12 +68,13 @@ module.exports.updateProfile = async (req, res, next) => {
 
 module.exports.updateAvatar = async (req, res, next) => {
   try {
+    const avatar = { avatar: req.body.avatar };
     const owner = req.user._id;
-    const val = await User.findByIdAndUpdate(owner, req.body, { new: true, runValidators: true });
+    const val = await User.findByIdAndUpdate(owner, avatar, { new: true, runValidators: true });
     res.send(val);
   } catch (error) {
     if (error.name === 'ValidationError') {
-      next(new BadRequest('Валидация не пройдена, проверьте правильность введённых данных!'));
+      return next(new BadRequest('Валидация не пройдена, проверьте правильность введённых данных!'));
     }
     next(error);
   }

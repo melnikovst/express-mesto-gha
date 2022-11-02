@@ -1,14 +1,15 @@
+/* eslint-disable consistent-return */
 const BadRequest = require('../customErrors/BadRequest');
 const Forbidden = require('../customErrors/Forbidden');
 const NotFound = require('../customErrors/NotFound');
 const Card = require('../models/cardModel');
 
-module.exports.getCards = async (_, res) => {
+module.exports.getCards = async (_, res, next) => {
   try {
     const response = await Card.find({});
     res.send(response);
   } catch (error) {
-    res.status(500).send(error);
+    next(error);
   }
 };
 
@@ -20,7 +21,7 @@ module.exports.postCard = async (req, res, next) => {
     res.send(card);
   } catch (error) {
     if (error.name === 'ValidationError') {
-      next(new BadRequest('Валидация не пройдена, проверьте правильность введённых данных!'));
+      return next(new BadRequest('Валидация не пройдена, проверьте правильность введённых данных!'));
     }
     next(error);
   }
@@ -29,19 +30,20 @@ module.exports.postCard = async (req, res, next) => {
 module.exports.deleteCard = async (req, res, next) => {
   try {
     const { cardId } = req.params;
-    const response = await Card.findByIdAndDelete(cardId);
+    const response = await Card.findById(cardId);
     if (!response) {
-      next(new NotFound('Карточки с указанным ID не существует.'));
+      return next(new NotFound('Карточки с указанным ID не существует.'));
     }
     console.log(response.owner);
     console.log(req.user._id);
     if (response.owner.toString() !== req.user._id) {
-      next(new Forbidden('Чужое не трожь!'));
+      return next(new Forbidden('Чужое не трожь!'));
     }
-    res.send(response);
+    const deletedCard = await Card.findByIdAndDelete(cardId);
+    res.send({ message: `Удалили карточку ${deletedCard.name}` });
   } catch (error) {
     if (error.name === 'CastError') {
-      next(new BadRequest('Карточка с указанным ID не найдена.'));
+      return next(new BadRequest('Карточка с указанным ID не найдена.'));
     }
     next(error);
   }
@@ -59,7 +61,7 @@ module.exports.putLike = async (req, res, next) => {
     } else res.status(200).send(response);
   } catch (error) {
     if (error.name === 'CastError') {
-      next(new BadRequest('Карточка с указанным ID не найдена.'));
+      return next(new BadRequest('Карточка с указанным ID не найдена.'));
     }
     next(error);
   }
@@ -80,9 +82,8 @@ module.exports.deleteLike = async (req, res, next) => {
     res.send(updatedCard);
   } catch (error) {
     if (error.name === 'CastError') {
-      next(new BadRequest('Валидация не пройдена, проверьте правильность введённых данных!'));
-    } else {
-      next(error);
+      return next(new BadRequest('Валидация не пройдена, проверьте правильность введённых данных!'));
     }
+    next(error);
   }
 };

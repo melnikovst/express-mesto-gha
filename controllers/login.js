@@ -2,7 +2,6 @@
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const Unauthorized = require('../customErrors/Unauthorized');
-const BadRequest = require('../customErrors/BadRequest');
 const User = require('../models/userModel');
 
 module.exports.login = async (req, res, next) => {
@@ -10,13 +9,13 @@ module.exports.login = async (req, res, next) => {
   try {
     const test = await User.findOne({ email }).select('+password');
     if (!test) {
-      next(new Unauthorized('Неправильный адрес электронной почты или неверный пароль'));
+      return next(new Unauthorized('Неправильный адрес электронной почты или неверный пароль'));
     }
     const matched = await bcrypt.compare(password, test.password);
     console.log(matched);
     console.log(test);
     if (!matched) {
-      next(new Unauthorized('Неправильные почта или пароль'));
+      return next(new Unauthorized('Неправильные почта или пароль'));
     }
     const key = jwt.sign({ _id: test._id }, '6360540f025b93cbcf82932d', {
       expiresIn: '7d',
@@ -26,9 +25,6 @@ module.exports.login = async (req, res, next) => {
       httpOnly: true,
     }).send({ message: 'Залогинились успешно)' });
   } catch (error) {
-    if (error.name === 'ValidationError') {
-      next(new BadRequest('Ужасный запрос, что ты такое?'));
-    }
     next(error);
   }
 };
