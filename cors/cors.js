@@ -20,5 +20,5 @@ module.exports.cors = (req, res, next) => {
     return res.end();
   }
   res.header('Access-Control-Allow-Credentials', true);
-  next();
+  return next();
 };
