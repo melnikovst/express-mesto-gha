@@ -6,6 +6,7 @@ const allowedCors = [
 ];
 
 module.exports.cors = (req, res, next) => {
+  res.header('Access-Control-Allow-Origin', '*');
   const { origin } = req.headers;
   res.header('Access-Control-Allow-Credentials', true);
   if (allowedCors.includes(origin)) {
