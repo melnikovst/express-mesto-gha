@@ -13,7 +13,7 @@ const { ver } = require('./middlewares/auth');
 const { postProfile } = require('./controllers/user');
 const { login } = require('./controllers/login');
 const { validateSignup, validateSignin, handleErrors } = require('./middlewares/error');
-const { cors } = require('./cors/cors');
+const cors = require('./cors/cors');
 const { requestLogger, errorLogger } = require('./middlewares/loggers');
 
 app.use(cors);

@@ -5,7 +5,7 @@ const allowedCors = [
   'localhost:3000',
 ];
 
-module.exports.cors = (req, res, next) => {
+module.exports = (req, res, next) => {
   res.header('Access-Control-Allow-Origin', '*');
   const { origin } = req.headers;
   res.header('Access-Control-Allow-Credentials', true);
