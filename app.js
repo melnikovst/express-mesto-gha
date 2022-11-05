@@ -16,10 +16,11 @@ const { validateSignup, validateSignin, handleErrors } = require('./middlewares/
 const { cors } = require('./cors/cors');
 const { requestLogger, errorLogger } = require('./middlewares/loggers');
 
+app.use(cors);
 mongoose.connect('mongodb://localhost:27017/mestodb');
 app.use(bodyParser.json());
 app.use(requestLogger);
-app.use(cors);
+
 app.post('/signup', validateSignup, postProfile);
 app.post('/signin', validateSignin, login);
 
