@@ -1,14 +1,12 @@
 const allowedCors = [
   'https://melnikovst.mesto.nomoredomains.icu',
   'http://melnikovst.mesto.nomoredomains.icu',
-  'https://localhost:3000',
-  'http://localhost:3000',
 ];
 
 const DEFAULT_ALLOWED_METHODS = 'GET,HEAD,PUT,PATCH,POST,DELETE';
 
 // eslint-disable-next-line consistent-return
-module.exports = (req, res, next) => {
+module.exports.cors = (req, res, next) => {
   const { method } = req;
   const { origin } = req.headers;
   const requestHeaders = req.headers['access-control-request-headers'];
