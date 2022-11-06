@@ -17,9 +17,9 @@ const { requestLogger, errorLogger } = require('./middlewares/loggers');
 const corsmid = require('./cors/corsmid');
 
 mongoose.connect('mongodb://localhost:27017/mestodb');
+app.use(corsmid());
 app.use(bodyParser.json());
 app.use(requestLogger);
-app.use(corsmid());
 app.post('/signup', validateSignup, postProfile);
 app.post('/signin', validateSignin, login);
 
