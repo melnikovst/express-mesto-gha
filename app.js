@@ -3,7 +3,6 @@ const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
 const parser = require('cookie-parser');
 const { errors } = require('celebrate');
-const testCorsLib = require('cors');
 
 const { PORT = 3000 } = process.env;
 const app = express();
@@ -15,18 +14,12 @@ const { postProfile } = require('./controllers/user');
 const { login } = require('./controllers/login');
 const { validateSignup, validateSignin, handleErrors } = require('./middlewares/error');
 const { requestLogger, errorLogger } = require('./middlewares/loggers');
+const { cors } = require('./cors/cors')
 
 mongoose.connect('mongodb://localhost:27017/mestodb');
 app.use(bodyParser.json());
 app.use(requestLogger);
-
-const corsAllowed = {
-  origin: 'https://melnikovst.mesto.nomoredomains.icu',
-  optionsSuccessStatus: 200,
-};
-
-app.options('*', testCorsLib());
-app.use(testCorsLib(corsAllowed));
+app.use(cors());
 app.post('/signup', validateSignup, postProfile);
 app.post('/signin', validateSignin, login);
 
