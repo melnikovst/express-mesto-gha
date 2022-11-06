@@ -27,7 +27,7 @@ app.post('/signup', validateSignup, postProfile);
 app.post('/signin', validateSignin, login);
 
 app.use(parser());
-app.use(ver);
+/* app.use(ver); */
 
 app.use(userRouter);
 app.use(cardRouter);
