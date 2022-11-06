@@ -14,12 +14,12 @@ const { postProfile } = require('./controllers/user');
 const { login } = require('./controllers/login');
 const { validateSignup, validateSignin, handleErrors } = require('./middlewares/error');
 const { requestLogger, errorLogger } = require('./middlewares/loggers');
-const cors = require('./cors/cors');
+const corsmid = require('./cors/corsmid');
 
 mongoose.connect('mongodb://localhost:27017/mestodb');
 app.use(bodyParser.json());
 app.use(requestLogger);
-app.use(cors());
+app.use(corsmid());
 app.post('/signup', validateSignup, postProfile);
 app.post('/signin', validateSignin, login);
 
