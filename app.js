@@ -20,7 +20,12 @@ mongoose.connect('mongodb://localhost:27017/mestodb');
 app.use(bodyParser.json());
 app.use(requestLogger);
 
-app.use(testCorsLib());
+const corsAllowed = {
+  origin: 'https://api.melnikovst.mesto.nomoredomains.icu',
+  optionsSuccessStatus: 200,
+};
+
+app.use(testCorsLib(corsAllowed));
 app.post('/signup', validateSignup, postProfile);
 app.post('/signin', validateSignin, login);
 
