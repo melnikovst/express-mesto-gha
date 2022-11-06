@@ -21,7 +21,7 @@ app.use(bodyParser.json());
 app.use(requestLogger);
 
 const corsAllowed = {
-  origin: 'https://api.melnikovst.mesto.nomoredomains.icu',
+  origin: 'https://melnikovst.mesto.nomoredomains.icu',
   optionsSuccessStatus: 200,
 };
 
