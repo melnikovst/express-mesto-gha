@@ -10,24 +10,22 @@ const app = express();
 const userRouter = require('./routes/userRouter');
 const cardRouter = require('./routes/cardRouter');
 const { notFoundHandler } = require('./utils/utils');
-/* const { ver } = require('./middlewares/auth'); */
+const { ver } = require('./middlewares/auth');
 const { postProfile } = require('./controllers/user');
 const { login } = require('./controllers/login');
 const { validateSignup, validateSignin, handleErrors } = require('./middlewares/error');
-/* const { cors } = require('./cors/cors'); */
 const { requestLogger, errorLogger } = require('./middlewares/loggers');
 
 mongoose.connect('mongodb://localhost:27017/mestodb');
 app.use(bodyParser.json());
 app.use(requestLogger);
-/* app.use(cors); */
 
 app.use(testCorsLib());
 app.post('/signup', validateSignup, postProfile);
 app.post('/signin', validateSignin, login);
 
 app.use(parser());
-/* app.use(ver); */
+app.use(ver);
 
 app.use(userRouter);
 app.use(cardRouter);

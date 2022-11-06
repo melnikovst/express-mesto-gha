@@ -81,7 +81,6 @@ module.exports.updateAvatar = async (req, res, next) => {
 };
 
 module.exports.me = async (req, res, next) => {
-  console.log(req.user);
   try {
     const me = await User.findOne({ _id: req.user._id });
     res.send(me);

@@ -12,8 +12,6 @@ module.exports.login = async (req, res, next) => {
       return next(new Unauthorized('Неправильный адрес электронной почты или неверный пароль'));
     }
     const matched = await bcrypt.compare(password, test.password);
-    console.log(matched);
-    console.log(test);
     if (!matched) {
       return next(new Unauthorized('Неправильные почта или пароль'));
     }
