@@ -23,7 +23,7 @@ app.use(requestLogger);
 /* app.use(cors); */
 
 app.use(testCorsLib());
-app.post('/signup', testCorsLib(), validateSignup, postProfile);
+app.post('/signup', validateSignup, postProfile);
 app.post('/signin', validateSignin, login);
 
 app.use(parser());

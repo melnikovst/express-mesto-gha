@@ -1,4 +1,3 @@
-/* eslint-disable no-unused-vars */
 /* eslint-disable consistent-return */
 const crypt = require('bcryptjs');
 const BadRequest = require('../customErrors/BadRequest');
@@ -25,7 +24,7 @@ module.exports.postProfile = async (req, res, next) => {
     const response = await User.create({
       _id, name, about, avatar, email, password: hashedPassword,
     });
-    res.send({ message: 'Пользователь создан' });
+    res.send(response);
   } catch (error) {
     if (error.name === 'ValidationError') {
       return next(new BadRequest('Валидация не пройдена, проверьте правильность введённых данных!'));
