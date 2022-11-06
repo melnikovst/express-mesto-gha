@@ -16,10 +16,10 @@ module.exports.getProfiles = async (_, res, next) => {
 };
 
 module.exports.postProfile = async (req, res, next) => {
-  const {
-    name, about, avatar, email, password, _id,
-  } = req.body;
   try {
+    const {
+      name, about, avatar, email, password, _id,
+    } = req.body;
     const hashedPassword = await crypt.hash(password, 5);
     const response = await User.create({
       _id, name, about, avatar, email, password: hashedPassword,
