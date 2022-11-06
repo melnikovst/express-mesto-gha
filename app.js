@@ -33,7 +33,7 @@ const corsOptionsDelegate = (req, callback) => {
     corsOptions = { origin: false }; // disable CORS for this request
   }
   callback(null, corsOptions); // callback expects two parameters: error and options
-}
+};
 
 app.use(testCorsLib(corsOptionsDelegate));
 app.post('/signup', validateSignup, postProfile);
