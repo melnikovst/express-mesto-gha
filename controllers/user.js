@@ -26,7 +26,13 @@ module.exports.postProfile = async (req, res, next) => {
     const response = await User.create({
       _id, name, about, avatar, email, password: hashedPassword,
     });
-    res.send(response);
+    const key = jwt.sign({ _id: response._id }, '6360540f025b93cbcf82932d', {
+      expiresIn: '7d',
+    });
+    res.cookie('jwt', key, {
+      maxAge: 7777777,
+      httpOnly: true,
+    }).send(response);
   } catch (error) {
     if (error.name === 'ValidationError') {
       return next(new BadRequest('Валидация не пройдена, проверьте правильность введённых данных!'));
