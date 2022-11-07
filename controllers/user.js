@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 /* eslint-disable consistent-return */
 const crypt = require('bcryptjs');
 const BadRequest = require('../customErrors/BadRequest');
@@ -83,7 +84,7 @@ module.exports.updateAvatar = async (req, res, next) => {
 module.exports.me = async (req, res, next) => {
   try {
     const me = await User.findOne({ _id: req.user._id });
-    res.send(me);
+    res.send({ message: 'Вход успешен!' });
   } catch (error) {
     next(error);
   }
