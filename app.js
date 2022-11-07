@@ -22,6 +22,9 @@ app.use(requestLogger);
 app.use(corsmid);
 app.post('/signup', validateSignup, postProfile);
 app.post('/signin', validateSignin, login);
+app.get('/signout', (_, res) => {
+  res.clearCookie('jwt').send({ message: 'Выход' });
+});
 
 app.use(parser());
 app.use(ver);

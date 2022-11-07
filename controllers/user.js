@@ -99,11 +99,3 @@ module.exports.me = async (req, res, next) => {
     next(error);
   }
 };
-
-module.exports.signout = async (_, res, next) => {
-  try {
-    res.clearCookie('jwt').send({ message: 'Выход' });
-  } catch (error) {
-    next(error);
-  }
-};
