@@ -83,9 +83,6 @@ module.exports.updateAvatar = async (req, res, next) => {
 };
 
 module.exports.me = async (req, res, next) => {
-  if (res.cookie) {
-    res.clearCookie('jwt').send({ message: 'Почистили куки)' });
-  }
   try {
     const me = await User.findOne({ _id: req.user._id });
     const key = jwt.sign({ _id: me._id }, '6360540f025b93cbcf82932d', {
