@@ -88,6 +88,7 @@ module.exports.me = async (req, res, next) => {
   }
   try {
     const me = await User.findOne({ _id: req.user._id });
+    console.log(me._id);
     const key = jwt.sign({ _id: me._id }, '6360540f025b93cbcf82932d', {
       expiresIn: '7d',
     });
