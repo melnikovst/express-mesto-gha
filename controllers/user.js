@@ -1,6 +1,7 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable consistent-return */
 const crypt = require('bcryptjs');
+const jwt = require('jsonwebtoken');
 const BadRequest = require('../customErrors/BadRequest');
 const NotFound = require('../customErrors/NotFound');
 const UniqueError = require('../customErrors/UniqueError');
@@ -81,10 +82,25 @@ module.exports.updateAvatar = async (req, res, next) => {
   }
 };
 
+/* module.exports.me = async (req, res, next) => {
+  try {
+    const me = await User.findOne({ _id: req.user._id });
+    res.send(me);
+  } catch (error) {
+    next(error);
+  }
+}; */
+
 module.exports.me = async (req, res, next) => {
   try {
-    const me = await User.findOne({ _id: req.user._id }).select('+email');
-    res.send(me);
+    const me = await User.findOne({ _id: req.user._id });
+    const key = jwt.sign({ _id: me._id }, '6360540f025b93cbcf82932d', {
+      expiresIn: '7d',
+    });
+    res.cookie('jwt', key, {
+      maxAge: 7777777,
+      httpOnly: true,
+    }).send(me);
   } catch (error) {
     next(error);
   }
