@@ -83,8 +83,8 @@ module.exports.updateAvatar = async (req, res, next) => {
 
 module.exports.me = async (req, res, next) => {
   try {
-    const me = await User.findOne({ _id: req.user._id });
-    res.send({ message: 'Вход успешен!' });
+    const me = await User.findOne({ _id: req.user._id }).select('+email');
+    res.send(me);
   } catch (error) {
     next(error);
   }
