@@ -1,4 +1,5 @@
 /* eslint-disable consistent-return */
+require('dotenv').config();
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const Unauthorized = require('../customErrors/Unauthorized');
@@ -7,6 +8,7 @@ const User = require('../models/userModel');
 const { JWT_SECRET, NODE_ENV } = process.env;
 
 module.exports.login = async (req, res, next) => {
+  console.log(`${NODE_ENV} логин`);
   const { email, password } = req.body;
   try {
     const test = await User.findOne({ email }).select('+password');

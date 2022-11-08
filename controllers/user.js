@@ -1,5 +1,6 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable consistent-return */
+require('dotenv').config();
 const crypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const BadRequest = require('../customErrors/BadRequest');
