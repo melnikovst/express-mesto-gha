@@ -4,6 +4,8 @@ const jwt = require('jsonwebtoken');
 const Unauthorized = require('../customErrors/Unauthorized');
 const User = require('../models/userModel');
 
+const { JWT_SECRET, NODE_ENV } = process.env;
+
 module.exports.login = async (req, res, next) => {
   const { email, password } = req.body;
   try {
@@ -15,7 +17,7 @@ module.exports.login = async (req, res, next) => {
     if (!matched) {
       return next(new Unauthorized('Неправильные почта или пароль'));
     }
-    const key = jwt.sign({ _id: test._id }, '6360540f025b93cbcf82932d', {
+    const key = jwt.sign({ _id: test._id }, NODE_ENV === 'production' ? JWT_SECRET : 'dev-secret', {
       expiresIn: '7d',
     });
     res.cookie('jwt', key, {

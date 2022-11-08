@@ -6,6 +6,8 @@ const BadRequest = require('../customErrors/BadRequest');
 const NotFound = require('../customErrors/NotFound');
 const UniqueError = require('../customErrors/UniqueError');
 
+const { JWT_SECRET, NODE_ENV } = process.env;
+
 const User = require('../models/userModel');
 
 module.exports.getProfiles = async (_, res, next) => {
@@ -26,7 +28,7 @@ module.exports.postProfile = async (req, res, next) => {
     const response = await User.create({
       _id, name, about, avatar, email, password: hashedPassword,
     });
-    const key = jwt.sign({ _id: response._id }, '6360540f025b93cbcf82932d', {
+    const key = jwt.sign({ _id: response._id }, NODE_ENV === 'production' ? JWT_SECRET : 'dev-secret', {
       expiresIn: '7d',
     });
     res.cookie('jwt', key, {
@@ -91,7 +93,7 @@ module.exports.updateAvatar = async (req, res, next) => {
 module.exports.me = async (req, res, next) => {
   try {
     const me = await User.findOne({ _id: req.user._id });
-    const key = jwt.sign({ _id: me._id }, '6360540f025b93cbcf82932d', {
+    const key = jwt.sign({ _id: me._id }, NODE_ENV === 'production' ? JWT_SECRET : 'dev-secret', {
       expiresIn: '7d',
     });
     res.cookie('jwt', key, {
