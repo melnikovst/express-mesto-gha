@@ -1,11 +1,10 @@
 /* eslint-disable consistent-return */
-require('dotenv').config();
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const Unauthorized = require('../customErrors/Unauthorized');
 const User = require('../models/userModel');
 
-const { JWT_SECRET, NODE_ENV } = process.env;
+const { NODE_ENV, JWT_SECRET } = require('../utils/serverConfig');
 
 module.exports.login = async (req, res, next) => {
   console.log(`${NODE_ENV} логин`);
@@ -19,10 +18,12 @@ module.exports.login = async (req, res, next) => {
     if (!matched) {
       return next(new Unauthorized('Неправильные почта или пароль'));
     }
-    const key = jwt.sign({ _id: test._id }, NODE_ENV === 'production' ? JWT_SECRET : 'dev-secret', {
+    const key = jwt.sign({ _id: test._id }, JWT_SECRET, {
       expiresIn: '7d',
     });
     res.cookie('jwt', key, {
+      sameSite: 'None',
+      secure: true,
       maxAge: 7777777,
       httpOnly: true,
     }).send({ message: 'Залогинились успешно)' });

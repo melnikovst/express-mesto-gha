@@ -1,6 +1,5 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable consistent-return */
-require('dotenv').config();
 const crypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const BadRequest = require('../customErrors/BadRequest');
@@ -29,10 +28,12 @@ module.exports.postProfile = async (req, res, next) => {
     const response = await User.create({
       _id, name, about, avatar, email, password: hashedPassword,
     });
-    const key = jwt.sign({ _id: response._id }, NODE_ENV === 'production' ? JWT_SECRET : 'dev-secret', {
+    const key = jwt.sign({ _id: response._id }, JWT_SECRET, {
       expiresIn: '7d',
     });
     res.cookie('jwt', key, {
+      sameSite: 'None',
+      secure: true,
       maxAge: 7777777,
       httpOnly: true,
     }).send(response);
@@ -98,6 +99,8 @@ module.exports.me = async (req, res, next) => {
       expiresIn: '7d',
     });
     res.cookie('jwt', key, {
+      sameSite: 'None',
+      secure: true,
       maxAge: 7777777,
       httpOnly: true,
     }).send(me);
