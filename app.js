@@ -38,9 +38,8 @@ app.use(ver);
 
 app.use(userRouter);
 app.use(cardRouter);
-
-app.use(errorLogger);
 app.use(notFoundHandler);
+app.use(errorLogger);
 app.use(errors());
 app.use(handleErrors);
 
