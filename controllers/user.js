@@ -85,7 +85,7 @@ module.exports.updateAvatar = async (req, res, next) => {
 module.exports.me = async (req, res, next) => {
   try {
     const me = await User.findOne({ _id: req.user._id });
-    res.cookie('jwt', 'privet', {
+    res.cookie('jwt', {
       sameSite: 'None',
       secure: true,
       maxAge: 7777777,
