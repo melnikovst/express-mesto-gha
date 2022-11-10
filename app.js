@@ -5,8 +5,8 @@ const mongoose = require('mongoose');
 const parser = require('cookie-parser');
 const { errors } = require('celebrate');
 
-const { PORT } = require('./utils/serverConfig');
-
+const { NODE_ENV, JWT_SECRET, PORT = 3000 } = process.env;
+console.log(NODE_ENV, JWT_SECRET);
 const app = express();
 const userRouter = require('./routes/userRouter');
 const cardRouter = require('./routes/cardRouter');
