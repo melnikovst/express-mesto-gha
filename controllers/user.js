@@ -6,8 +6,6 @@ const BadRequest = require('../customErrors/BadRequest');
 const NotFound = require('../customErrors/NotFound');
 const UniqueError = require('../customErrors/UniqueError');
 
-const { JWT_SECRET, NODE_ENV } = process.env;
-
 const User = require('../models/userModel');
 
 module.exports.getProfiles = async (_, res, next) => {

@@ -1,3 +1,5 @@
+require('dotenv').config();
+
 const {
   NODE_ENV = 'develop',
   PORT = 3000,
