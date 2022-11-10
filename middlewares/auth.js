@@ -1,3 +1,4 @@
+require('dotenv').config();
 const token = require('jsonwebtoken');
 const Unauthorized = require('../customErrors/Unauthorized');
 
