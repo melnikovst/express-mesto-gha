@@ -1,10 +1,12 @@
 /* eslint-disable consistent-return */
+require('dotenv').config();
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const Unauthorized = require('../customErrors/Unauthorized');
 const User = require('../models/userModel');
 
 const { NODE_ENV, JWT_SECRET } = process.env;
+console.log(NODE_ENV, JWT_SECRET);
 
 module.exports.login = async (req, res, next) => {
   console.log(`${NODE_ENV} логин`);
