@@ -9,6 +9,7 @@ console.log(NODE_ENV, JWT_SECRET);
 module.exports.ver = (req, _, next) => {
   console.log(`${NODE_ENV} ауф`);
   const { jwt } = req.cookies;
+  console.log(jwt);
   if (!jwt) {
     return next(new Unauthorized('Необходима авторизация'));
   }
