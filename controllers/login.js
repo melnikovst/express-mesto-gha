@@ -25,9 +25,9 @@ module.exports.login = async (req, res, next) => {
     });
     res.cookie('jwt', key, {
       sameSite: 'None',
-      secure: true,
+      /* secure: true, */
       maxAge: 7777777,
-      httpOnly: true,
+      /* httpOnly: true, */
     }).send({ message: 'Залогинились успешно)' });
   } catch (error) {
     next(error);
