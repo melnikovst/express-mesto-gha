@@ -23,8 +23,9 @@ module.exports.login = async (req, res, next) => {
     const key = jwt.sign({ _id: test._id }, NODE_ENV === 'production' ? JWT_SECRET : 'dev-secret', {
       expiresIn: '7d',
     });
+    console.log(key)
     res.cookie('jwt', key, {
-      sameSite: 'None',
+      /* sameSite: 'None', */
       /* secure: true, */
       maxAge: 7777777,
       /* httpOnly: true, */
