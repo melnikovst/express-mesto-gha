@@ -1,6 +1,6 @@
 const allowedCors = [
-  'https://melnikovst.mesto.nomoredomains.icu',
-  'http://melnikovst.mesto.nomoredomains.icu',
+  'https://melnikovst.pictures.nomoredomainsclub.ru',
+  'http://melnikovst.pictures.nomoredomainsclub.ru',
   'http://localhost:3000',
   'https://localhost:3000',
 ];
