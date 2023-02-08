@@ -25,7 +25,7 @@ module.exports.login = async (req, res, next) => {
     });
     console.log(key)
     res.cookie('jwt', key, {
-      /* sameSite: 'None', */
+      sameSite: 'None',
       /* secure: true, */
       maxAge: 7777777,
       /* httpOnly: true, */
